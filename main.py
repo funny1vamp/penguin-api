@@ -1,3 +1,5 @@
+
+from fastapi.responses import FileResponse
 import joblib
 import pandas as pd
 from fastapi import FastAPI
@@ -24,3 +26,7 @@ def predict(penguin: Penguin):
     X = pd.DataFrame([penguin.model_dump()])
     prediction = model.predict(X)[0]
     return {"species": prediction}
+
+@app.get("/")
+def home(): 
+    return FileResponse("index.html")

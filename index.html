@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Penguin Species Predictor</title>
+    <style>
+        body { font-family: sans-serif; max-width: 400px; margin: 40px auto; }
+        label { display: block; margin: 10px 0; }
+        input { margin-left: 10px; width: 100px; }
+        button { margin-top: 15px; padding: 5px 15px; }
+        #out { font-size: 1.2em; font-weight: bold; color: #2c3e50; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <h2>Penguin Predictor</h2>
+    <form id="form">
+        <label>Bill length (mm) <input name="bill_length_mm" type="number" step="any" value="39.1"></label>
+        <label>Bill depth (mm) <input name="bill_depth_mm" type="number" step="any" value="18.7"></label>
+        <label>Flipper length (mm) <input name="flipper_length_mm" type="number" step="any" value="181"></label>
+        <label>Body mass (g) <input name="body_mass_g" type="number" step="any" value="3750"></label>
+        <button type="submit">Predict</button>
+    </form>
+    <p id="out"></p>
+
+    <script>
+        document.getElementById("form").onsubmit = async (event) => {
+            event.preventDefault(); // 阻止页面刷新
+            const data = Object.fromEntries(new FormData(event.target));
+            const r = await fetch("/predict", {
+                method: "POST", 
+                body: JSON.stringify(data),
+                headers: {"Content-Type": "application/json"}
+            });
+            document.getElementById("out").textContent = (await r.json()).species;
+        };
+    </script>
+</body>
+</html>
